@@ -27,7 +27,8 @@ function isPhone(){
  return /Android.+Mobile|iPhone|iPod|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 function isMobilePortrait(){return isPhone()&&window.matchMedia("(orientation: portrait)").matches}
-function updateOrientationPrompt(){const p=$("#orientationPrompt");if(!p)return;const phone=isPhone(),show=phone&&window.matchMedia("(orientation: portrait)").matches;document.body.classList.toggle("is-phone",phone);p.classList.toggle("show",show);p.setAttribute("aria-hidden",show?"false":"true");document.body.classList.toggle("mobile-portrait-locked",show)}
+// V3.3.5: retrato volta a ser permitido; o aviso de rotação não bloqueia mais a interface.
+function updateOrientationPrompt(){const p=$("#orientationPrompt");if(!p)return;p.classList.remove("show");p.setAttribute("aria-hidden","true");document.body.classList.remove("mobile-portrait-locked")}
 window.addEventListener("resize",updateOrientationPrompt);window.addEventListener("orientationchange",()=>setTimeout(updateOrientationPrompt,120));
 function loadPhotoBundle(uf){if(window.VOTASIM_PHOTOS[uf])return Promise.resolve();return new Promise(resolve=>{const s=document.createElement("script");s.src=`./assets/photo-data/${uf}.js`;s.onload=resolve;s.onerror=resolve;document.head.appendChild(s)})}
 function photoFor(c){return window.VOTASIM_PHOTOS[c.uf]?.[String(c.id)]||null}
