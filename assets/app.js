@@ -34,7 +34,7 @@ function loadPhotoBundle(uf){if(window.VOTASIM_PHOTOS[uf])return Promise.resolve
 function photoFor(c){return window.VOTASIM_PHOTOS[c.uf]?.[String(c.id)]||null}
 function audio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume();return audioCtx}
 function tone(freq=900,duration=.055,delay=0,volume=.045){try{const a=audio(),o=a.createOscillator(),g=a.createGain(),t=a.currentTime+delay;o.type="sine";o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(volume,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+duration)}catch(e){}}
-function keySound(){tone(720,.035,0,.025)}
+function keySound(){tone(720,.045,0,.065)}
 function playClip(kind,volume=1){
  try{
    const cached=audioCache[kind];
@@ -102,5 +102,5 @@ function confirmVote(){
  confirmSound();
  step++;input="";blank=false;render();
 }
-function finish(){finishSound();$("#app").innerHTML=`<section class="card"><div class="finish">FIM</div><p style="text-align:center">Simulação concluída. <b>Nenhum voto foi enviado ou registrado.</b></p><button class="primary" onclick="home()">NOVA SIMULAÇÃO</button><p class="notice">Dados exibidos são derivados de arquivos públicos e podem mudar conforme a atualização da fonte. Consulte a Justiça Eleitoral para informações oficiais.</p></section>`}
+function finish(){finishSound();$("#app").innerHTML=`<section class="card finish-card"><div class="finish">FIM</div><p style="text-align:center">Simulação concluída. <b>Nenhum voto foi enviado, registrado ou armazenado.</b></p><button class="primary" onclick="home()">NOVA SIMULAÇÃO</button><p class="notice">Dados exibidos são derivados de arquivos públicos e podem mudar conforme a atualização da fonte. Consulte a Justiça Eleitoral para informações oficiais.</p><footer class="project-credit"><strong>VotaSim 2026 • Antonio Martins</strong><span>Projeto independente. Não salvamos seus votos nem qualquer escolha feita durante a simulação.</span><a href="https://github.com/antoniocarlosmjr/votasim-2026" target="_blank" rel="noopener noreferrer">github.com/antoniocarlosmjr/votasim-2026</a></footer></section>`}
 home();updateOrientationPrompt();

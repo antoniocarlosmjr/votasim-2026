@@ -101,3 +101,24 @@ body.mobile-portrait-locked{overflow:hidden}
   .hint{font-size:7px}.keyboard{padding:3px}.key{min-height:23px;height:23px;font-size:13px}.action{height:24px}.confirm{height:27px}
   .card{padding:10px;max-height:calc(100dvh - 34px)}.card h1{font-size:19px}.card h2{font-size:18px}.lead{font-size:12px}.notice{font-size:9px}
 }
+
+
+/* V3.3.6 — teclado um pouco maior + créditos finais */
+.key{min-height:62px;font-size:27px}
+.keyboard{padding:17px}.keys{gap:10px}.actions{gap:8px;margin-top:13px}
+.action{height:53px;font-size:12px}.confirm{height:62px}
+.project-credit{margin-top:22px;padding-top:16px;border-top:1px solid #ddd;display:flex;flex-direction:column;gap:7px;text-align:center;font-size:12px;line-height:1.4;color:#555}
+.project-credit strong{color:#222}.project-credit a{color:#222;font-weight:700;overflow-wrap:anywhere}
+@media(max-width:760px) and (orientation:portrait){
+  .keyboard{padding:9px;max-width:350px}.keys{gap:6px}.key{min-height:42px;font-size:21px}
+  .actions{gap:5px;margin-top:7px}.action{height:41px;font-size:9px}.confirm{height:47px}
+  .project-credit{margin-top:14px;padding-top:11px;font-size:10px;gap:5px}
+}
+@media(max-width:900px) and (orientation:landscape){
+  .keyboard{padding:7px}.keys{gap:4px}.key{min-height:31px;font-size:17px}
+  .actions{gap:4px;margin-top:5px}.action{height:32px;font-size:8px}.confirm{height:37px}
+  .project-credit{margin-top:8px;padding-top:7px;font-size:9px;gap:3px}
+}
+@media(max-width:900px) and (orientation:landscape) and (max-height:390px){
+  .keyboard{padding:5px}.key{min-height:27px;font-size:15px}.action{height:28px}.confirm{height:32px}
+}
