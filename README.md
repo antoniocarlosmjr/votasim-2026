@@ -1,22 +1,18 @@
-# VotaSim 2026 — V2
+# VotaSim 2026 — V3.1
 
-Protótipo independente e educativo de uma experiência de votação.
-
-## O que mudou na V2
-- sequência de seis painéis;
-- senador corrigido para 3 dígitos;
-- interface responsiva inspirada no fluxo da urna, sem se apresentar como produto oficial;
-- BRANCO, CORRIGE e CONFIRMA;
-- voto nominal, voto de legenda (cargos proporcionais) e voto nulo;
-- breve período de conferência antes de liberar CONFIRMA;
-- bloqueio de repetição da mesma candidatura nas duas vagas de Senado;
-- tela final FIM;
-- nenhuma persistência ou transmissão de votos;
-- candidatos ainda fictícios.
+Esta versão já contém os JSONs gerados a partir do arquivo `consulta_cand_2026.zip` fornecido pelo usuário em 03/10/2026.
 
 ## Publicação
-Substitua o `index.html` da raiz do repositório pelo arquivo desta pasta e faça commit/push na branch `main`.
-Se o Cloudflare estiver integrado ao repositório, o deploy será disparado a partir do push.
+Não é necessário executar Python para esta versão.
+Substitua o conteúdo do repositório pelos arquivos deste pacote e faça commit/push na branch `main`.
 
-## Próxima etapa
-Trocar os mocks por uma camada de dados oficiais públicos de candidaturas de 2026, separada por UF.
+## Estrutura
+- `index.html`
+- `assets/app.css`
+- `assets/app.js`
+- `data/AC.json` ... `data/TO.json`
+- `data/BR.json` para Presidência
+- `tools/import_tse.py` mantido apenas para futuras atualizações dos dados
+
+## Observação
+As fotos não estão incluídas neste pacote porque o ZIP de candidaturas contém CSVs, não os arquivos de fotografias. A interface já possui suporte ao campo `foto` para uma próxima atualização.
