@@ -9,6 +9,9 @@ const BASE_OFFICES=[
  {id:"presidente",cargo:"PRESIDENTE",digits:2}
 ];
 let state="",data=null,offices=[],step=0,input="",blank=false,votes=[],unlock=false,timer=null,audioCtx=null;
+const confirmAudio=new Audio("./assets/audio/confirmacao.mp3");
+const finishAudio=new Audio("./assets/audio/fim.mp3");
+confirmAudio.preload="auto"; finishAudio.preload="auto";
 window.VOTASIM_PHOTOS=window.VOTASIM_PHOTOS||{};
 const $=q=>document.querySelector(q), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function toast(s){const t=$("#toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
@@ -20,8 +23,9 @@ function photoFor(c){return window.VOTASIM_PHOTOS[c.uf]?.[String(c.id)]||null}
 function audio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume();return audioCtx}
 function tone(freq=900,duration=.055,delay=0,volume=.045){try{const a=audio(),o=a.createOscillator(),g=a.createGain(),t=a.currentTime+delay;o.type="sine";o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(volume,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+duration)}catch(e){}}
 function keySound(){tone(720,.035,0,.025)}
-function confirmSound(){tone(1050,.07,0,.045)}
-function finishSound(){tone(1040,.08,0,.05);tone(1320,.08,.10,.05);tone(1640,.34,.20,.055)}
+function playClip(a){try{a.pause();a.currentTime=0;const p=a.play();if(p?.catch)p.catch(()=>{})}catch(e){}}
+function confirmSound(){playClip(confirmAudio)}
+function finishSound(){playClip(finishAudio)}
 function home(){ $("#app").innerHTML=`<section class="card"><h1>🗳️ VotaSim 2026</h1><p class="lead">Simule a sequência da votação de 2026 com dados de candidaturas preparados a partir da base pública do TSE.</p><button class="primary" onclick="chooseUF()">COMEÇAR</button><p class="notice"><b>Projeto independente e educativo.</b> Não é um serviço do TSE ou da Justiça Eleitoral. Nenhum voto é transmitido, registrado ou contabilizado.</p></section>`}
 function chooseUF(){const opts=Object.entries(UFS).map(([u,n])=>`<option value="${u}" ${u==="SE"?"selected":""}>${n}</option>`).join("");$("#app").innerHTML=`<section class="card"><h2>Escolha a UF</h2><p>Os cargos estaduais serão carregados para a UF selecionada. Presidente é nacional.</p><select id="uf">${opts}</select><button class="primary" onclick="loadUF()">CARREGAR CANDIDATURAS</button><p class="notice">Os arquivos em <code>/data</code> são gerados pelo importador incluído no projeto.</p></section>`}
 async function loadUF(){
@@ -66,12 +70,12 @@ function correct(){keySound();input="";blank=false;render()}
 function whiteVote(){keySound();input="";blank=true;render()}
 function confirmVote(){
  if(!ready()||!unlock)return;
- confirmSound();
  let t=type(),c=cand();
  // Regra 2026: repetir a mesma candidatura ao Senado torna o segundo voto nulo.
  if(office().id==="senador2"&&c){const first=votes.find(v=>v.office==="senador1");if(first?.candidateId===c.id)t="null"}
  votes.push({office:office().id,type:t,candidateId:c?.id||null});
  if(step===offices.length-1)return finish();
+ confirmSound();
  step++;input="";blank=false;render();
 }
 function finish(){finishSound();$("#app").innerHTML=`<section class="card"><div class="finish">FIM</div><p style="text-align:center">Simulação concluída. <b>Nenhum voto foi enviado ou registrado.</b></p><button class="primary" onclick="home()">NOVA SIMULAÇÃO</button><p class="notice">Dados exibidos são derivados de arquivos públicos e podem mudar conforme a atualização da fonte. Consulte a Justiça Eleitoral para informações oficiais.</p></section>`}
