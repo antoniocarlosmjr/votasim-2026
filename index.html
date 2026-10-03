@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VotaSim 2026</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e9e9e9;font-family:Arial,sans-serif;color:#111}
+.app{max-width:900px;margin:auto;min-height:100vh;background:#f5f5f5}
+header{padding:18px 20px;background:#222;color:#fff;text-align:center;font-weight:700}
+.screen{padding:24px 18px;min-height:calc(100vh - 62px);display:flex;flex-direction:column}
+.card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px #0001}
+h1{text-align:center;margin:10px 0 12px;font-size:32px}.sub{text-align:center;color:#555;line-height:1.5}
+button,select{font:inherit}button{border:0;border-radius:8px;padding:16px;font-weight:700;cursor:pointer}
+.primary{background:#222;color:white}.start{margin-top:30px;width:100%}
+.notice{font-size:12px;color:#777;text-align:center;margin-top:18px;line-height:1.4}
+.spacer{flex:1}.select{width:100%;padding:15px;border:1px solid #aaa;border-radius:8px;background:#fff}
+.urna{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;flex:1}
+.display{background:#f8f8f8;border:2px solid #333;padding:22px;min-height:300px}
+.office{text-align:center;font-weight:800;font-size:20px;margin-bottom:25px}
+.number{font-size:25px;min-height:36px;border-bottom:1px solid #777;margin-bottom:22px;letter-spacing:5px}
+.candidate{font-size:20px;font-weight:700;line-height:1.5}.small{font-size:15px;font-weight:400}
+.keyboard{background:#333;padding:14px;border-radius:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;align-content:start}
+.key{background:#111;color:#fff;font-size:24px;padding:16px}.key:active{transform:scale(.97)}
+.action{font-size:13px;padding:13px;background:#ddd;color:#111}.confirm{background:#65a765}.correct{background:#d9a82e}.white{background:#eee}
+.actions{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:3px}
+.progress{text-align:center;color:#666;font-size:13px;margin-bottom:10px}
+@media(max-width:650px){.urna{grid-template-columns:1fr}.display{min-height:220px}.keyboard{max-width:430px;margin:auto;width:100%}.screen{padding:14px}.office{font-size:17px}}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modalbox{background:#fff;border-radius:14px;padding:25px;max-width:420px;width:100%;text-align:center}.modalbox button{width:100%;margin-top:15px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>VotaSim 2026</header>
+<div id="app"></div>
+</div>
+<div id="modal" class="modal"><div class="modalbox"><h2>SIMULAÇÃO ENCERRADA</h2><p>Você concluiu a simulação.</p><p>Nenhum voto foi enviado ou registrado pela Justiça Eleitoral.</p><button class="primary" onclick="location.reload()">VOLTAR AO INÍCIO</button></div></div>
+
+<script>
+const offices=[
+ {name:"DEPUTADO FEDERAL",digits:4},
+ {name:"DEPUTADO ESTADUAL",digits:5},
+ {name:"SENADOR",digits:2},
+ {name:"SENADOR",digits:2},
+ {name:"GOVERNADOR",digits:2},
+ {name:"PRESIDENTE",digits:2}
+];
+const mock=[
+ {number:"1234",name:"CANDIDATO UM",party:"ABC",office:"DEPUTADO FEDERAL",state:"SE"},
+ {number:"5678",name:"CANDIDATO DOIS",party:"XYZ",office:"DEPUTADO FEDERAL",state:"SE"}
+];
+let state="SE",step=0,input="";
+
+function home(){
+app.innerHTML=`<div class="screen">
+<div class="spacer"></div><div class="card">
+<h1>🗳️ VotaSim 2026</h1>
+<p class="sub">Simule uma votação e conheça a experiência de votar.</p>
+<button class="primary start" onclick="stateScreen()">COMEÇAR</button>
+<p class="notice">Protótipo independente para fins educativos. Não é um aplicativo oficial da Justiça Eleitoral.</p>
+</div><div class="spacer"></div></div>`;
+}
+function stateScreen(){
+app.innerHTML=`<div class="screen"><div class="card">
+<h2>Onde você vota?</h2><p>Selecione seu estado:</p>
+<select class="select" id="state"><option value="SE">Sergipe</option><option value="BA">Bahia</option><option value="SP">São Paulo</option><option value="RJ">Rio de Janeiro</option></select>
+<button class="primary start" onclick="start()">CONTINUAR</button>
+</div></div>`;
+}
+function start(){state=document.getElementById("state").value;step=0;input="";voteScreen()}
+function candidate(){
+return mock.find(c=>c.number===input&&c.state===state&&c.office===offices[step].name);
+}
+function voteScreen(){
+let c=candidate();
+let content=input==="BRANCO"?`<div class="candidate">VOTO EM BRANCO</div>`:
+c?`<div class="candidate">Número: ${input}<br><br>${c.name}<br><span class="small">${c.party}</span></div>`:
+`<div class="small">Digite o número do candidato</div>`;
+app.innerHTML=`<div class="screen">
+<div class="progress">VOTAÇÃO ${step+1} DE ${offices.length}</div>
+<div class="urna"><div class="display"><div class="office">${offices[step].name}</div><div class="number">${input}</div>${content}</div>
+<div class="keyboard">${["1","2","3","4","5","6","7","8","9","0"].map(n=>`<button class="key" onclick="digit('${n}')">${n}</button>`).join("")}
+<div class="actions"><button class="action white" onclick="whiteVote()">BRANCO</button><button class="action correct" onclick="correct()">CORRIGE</button><button class="action confirm" onclick="confirmVote()">CONFIRMA</button></div></div></div></div>`;
+}
+function digit(n){if(input==="BRANCO")return;if(input.length<offices[step].digits){input+=n;voteScreen()}}
+function correct(){input="";voteScreen()}
+function whiteVote(){input="BRANCO";voteScreen()}
+function confirmVote(){
+if(input && input!=="BRANCO" && !candidate()){alert("Número inválido nesta simulação.");return}
+if(step===offices.length-1){document.getElementById("modal").classList.add("show");return}
+step++;input="";voteScreen()
+}
+home();
+</script>
+</body>
+</html>
