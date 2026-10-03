@@ -8,13 +8,12 @@ const BASE_OFFICES=[
  {id:"governador",cargo:"GOVERNADOR",digits:2},
  {id:"presidente",cargo:"PRESIDENTE",digits:2}
 ];
-let state="",data=null,offices=[],step=0,input="",blank=false,votes=[],unlock=false,timer=null,portraitDismissed=false,audioCtx=null;
+let state="",data=null,offices=[],step=0,input="",blank=false,votes=[],unlock=false,timer=null,audioCtx=null;
 window.VOTASIM_PHOTOS=window.VOTASIM_PHOTOS||{};
 const $=q=>document.querySelector(q), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function toast(s){const t=$("#toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
-function isMobilePortrait(){return window.matchMedia("(max-width: 760px) and (orientation: portrait)").matches}
-function updateOrientationPrompt(){const p=$("#orientationPrompt");if(!p)return;const show=isMobilePortrait()&&!portraitDismissed;p.classList.toggle("show",show);p.setAttribute("aria-hidden",show?"false":"true")}
-function continuePortrait(){portraitDismissed=true;updateOrientationPrompt()}
+function isMobilePortrait(){return window.matchMedia("(max-width: 900px) and (orientation: portrait)").matches}
+function updateOrientationPrompt(){const p=$("#orientationPrompt");if(!p)return;const show=isMobilePortrait();p.classList.toggle("show",show);p.setAttribute("aria-hidden",show?"false":"true");document.body.classList.toggle("mobile-portrait-locked",show)}
 window.addEventListener("resize",updateOrientationPrompt);window.addEventListener("orientationchange",()=>setTimeout(updateOrientationPrompt,120));
 function loadPhotoBundle(uf){if(window.VOTASIM_PHOTOS[uf])return Promise.resolve();return new Promise(resolve=>{const s=document.createElement("script");s.src=`./assets/photo-data/${uf}.js`;s.onload=resolve;s.onerror=resolve;document.head.appendChild(s)})}
 function photoFor(c){return window.VOTASIM_PHOTOS[c.uf]?.[String(c.id)]||null}
@@ -59,8 +58,8 @@ function details(){
 }
 function render(){
  clearTimeout(timer);unlock=false;const r=ready();
- $("#app").innerHTML=`<section class="urna-wrap"><div class="progress"><span>1º TURNO • ${esc(state)}</span><span>${step+1}/${offices.length}</span></div><div class="urna"><div class="display"><div>Seu voto para</div><div class="office">${esc(office().label||office().cargo)}</div><div class="digits">${boxes()}</div>${details()}<div class="hint">${r?"Confira seu voto.":"Use o teclado para informar o número."}<br><b>CORRIGE</b> reinicia este cargo.</div></div><div><div class="keyboard"><div class="brand">TECLADO • SIMULAÇÃO</div><div class="keys">${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="key" onclick="digit('${n}')">${n}</button>`).join("")}<button class="key zero" onclick="digit('0')">0</button></div><div class="actions"><button class="action white" onclick="whiteVote()">BRANCO</button><button class="action correct" onclick="correct()">CORRIGE</button><button id="confirm" class="action confirm" onclick="confirmVote()" ${r?"disabled":""}>CONFIRMA</button></div></div><div class="foot">Nenhum voto é transmitido ou armazenado.</div></div></div></section>`;
- if(r)timer=setTimeout(()=>{unlock=true;const b=$("#confirm");if(b)b.disabled=false},1000);
+ $("#app").innerHTML=`<section class="urna-wrap"><div class="progress"><span>1º TURNO • ${esc(state)}</span><span>${step+1}/${offices.length}</span></div><div class="urna"><div class="display"><div>Seu voto para</div><div class="office">${esc(office().label||office().cargo)}</div><div class="digits">${boxes()}</div>${details()}<div class="hint">${r&&!unlock?"<b>Confira seu voto</b>":r?"Confira seu voto e pressione <b>CONFIRMA</b>.":"Use o teclado para informar o número."}<br><b>CORRIGE</b> reinicia este cargo.</div></div><div><div class="keyboard"><div class="brand">TECLADO • SIMULAÇÃO</div><div class="keys">${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="key" onclick="digit('${n}')">${n}</button>`).join("")}<button class="key zero" onclick="digit('0')">0</button></div><div class="actions"><button class="action white" onclick="whiteVote()">BRANCO</button><button class="action correct" onclick="correct()">CORRIGE</button><button id="confirm" class="action confirm" onclick="confirmVote()" ${r?"disabled":""}>CONFIRMA</button></div></div><div class="foot">Nenhum voto é transmitido ou armazenado.</div></div></div></section>`;
+ if(r)timer=setTimeout(()=>{unlock=true;const b=$("#confirm");if(b)b.disabled=false;const h=document.querySelector(".hint");if(h)h.innerHTML=`Confira seu voto e pressione <b>CONFIRMA</b>.<br><b>CORRIGE</b> reinicia este cargo.`},1000);
 }
 function digit(n){if(blank||input.length>=office().digits)return;keySound();input+=n;render()}
 function correct(){keySound();input="";blank=false;render()}

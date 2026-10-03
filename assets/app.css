@@ -30,3 +30,8 @@ button,select{font:inherit}.app{max-width:1120px;min-height:100vh;margin:auto;ba
 .phone-turn{width:92px;height:92px;margin:auto;position:relative}.phone-turn span{position:absolute;width:42px;height:70px;border:4px solid #fff;border-radius:8px;left:25px;top:11px;animation:turnPhone 1.8s ease-in-out infinite}.phone-turn:after{content:"↻";position:absolute;right:-5px;top:25px;font-size:38px;font-weight:700}
 @keyframes turnPhone{0%,25%{transform:rotate(0deg)}65%,100%{transform:rotate(90deg)}}
 @media (orientation: landscape){.orientation-prompt{display:none!important}}
+
+/* V3.3.1 — no celular em retrato, a experiência exige paisagem */
+.orientation-help{font-size:13px!important;margin-top:10px!important;color:#aaa!important}
+body.mobile-portrait-locked{overflow:hidden}
+@media (max-width:900px) and (orientation:portrait){.orientation-prompt.show{display:flex!important}.orientation-card{padding:8px}.orientation-card h2{font-size:26px}.orientation-card p{font-size:16px}}
