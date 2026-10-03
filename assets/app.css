@@ -23,3 +23,10 @@ button,select{font:inherit}.app{max-width:1120px;min-height:100vh;margin:auto;ba
   .candidate{grid-template-columns:1fr 76px}.photo,.photo-placeholder{width:76px;height:96px}.candidate h2{font-size:17px}.candidate p{font-size:11px;margin:3px 0}.status{font-size:20px;margin-top:8px}.hint{left:12px;right:12px;bottom:8px;font-size:10px;padding-top:5px}
   .keyboard{padding:8px;max-width:330px}.brand{margin-bottom:6px}.keys{gap:5px}.key{min-height:38px;font-size:19px}.actions{margin-top:6px;gap:4px}.action{height:39px;font-size:9px}.confirm{height:44px}.foot{margin-top:5px;font-size:9px}
 }
+
+/* V3.3 — orientação mobile */
+.orientation-prompt{display:none;position:fixed;inset:0;z-index:9999;background:#171717f2;padding:24px;align-items:center;justify-content:center;text-align:center;color:#fff}
+.orientation-prompt.show{display:flex}.orientation-card{width:min(360px,100%)}.orientation-card h2{margin:20px 0 8px;font-size:25px}.orientation-card p{margin:0;color:#ddd;line-height:1.45}.orientation-card .primary{background:#fff;color:#171717}
+.phone-turn{width:92px;height:92px;margin:auto;position:relative}.phone-turn span{position:absolute;width:42px;height:70px;border:4px solid #fff;border-radius:8px;left:25px;top:11px;animation:turnPhone 1.8s ease-in-out infinite}.phone-turn:after{content:"↻";position:absolute;right:-5px;top:25px;font-size:38px;font-weight:700}
+@keyframes turnPhone{0%,25%{transform:rotate(0deg)}65%,100%{transform:rotate(90deg)}}
+@media (orientation: landscape){.orientation-prompt{display:none!important}}
