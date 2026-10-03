@@ -59,3 +59,63 @@ body.mobile-portrait-locked{overflow:hidden}
   .key{min-height:24px;font-size:14px}.action{height:26px}.confirm{height:30px}
   .photo,.photo-placeholder{width:55px;height:68px}.candidate{grid-template-columns:1fr 55px}
 }
+
+/* V3.3.4 — mobile landscape deve caber inteiro, sem depender de rolagem */
+body.is-phone{overscroll-behavior:none}
+body.is-phone .app{min-height:100dvh}
+@media (orientation: landscape){
+  body.is-phone{overflow:hidden}
+  body.is-phone .app{height:100dvh;min-height:100dvh;overflow:hidden}
+  body.is-phone .top{height:24px;padding:0 7px}
+  body.is-phone .top strong{font-size:10px}
+  body.is-phone .top span{font-size:6px;padding:2px 4px}
+  body.is-phone .page{height:calc(100dvh - 24px);min-height:0;padding:2px;overflow:hidden;align-items:center}
+
+  /* Início e seleção de UF também cabem sem rolagem. */
+  body.is-phone .card{width:min(520px,96vw);max-height:calc(100dvh - 30px);overflow:hidden;padding:10px 14px;border-radius:9px;box-shadow:0 4px 14px #0001}
+  body.is-phone .card h1{font-size:18px;margin:2px 0 5px}
+  body.is-phone .card h2{font-size:17px;margin:2px 0 5px}
+  body.is-phone .card p{font-size:10px;line-height:1.25;margin:4px 0}
+  body.is-phone .card .lead{font-size:11px;line-height:1.3}
+  body.is-phone .card .notice{font-size:8px;line-height:1.2;margin-top:5px}
+  body.is-phone .card select{padding:6px 8px;font-size:11px;border-radius:5px}
+  body.is-phone .card .primary{padding:7px 10px;margin-top:6px;font-size:10px;border-radius:5px}
+
+  /* Urna: usa a viewport inteira e não cria scroll. */
+  body.is-phone .urna-wrap{height:100%;max-height:100%;display:flex;flex-direction:column;min-height:0}
+  body.is-phone .progress{flex:0 0 auto;margin:0 2px 2px;font-size:7px;line-height:8px}
+  body.is-phone .urna{flex:1;min-height:0;height:100%;grid-template-columns:minmax(0,1.72fr) minmax(165px,.58fr);gap:4px;padding:4px;border-radius:5px;overflow:hidden}
+  body.is-phone .display{min-height:0;height:100%;padding:5px 7px;border-width:2px;overflow:hidden}
+  body.is-phone .display>div:first-child{font-size:8px}
+  body.is-phone .office{font-size:13px;margin:0 0 3px}
+  body.is-phone .digits{min-height:22px;margin-bottom:3px;gap:3px}
+  body.is-phone .box{width:19px;height:22px;font-size:14px;border-width:1px}
+  body.is-phone .candidate{grid-template-columns:1fr 50px;gap:4px}
+  body.is-phone .candidate h2{font-size:12px;margin:0}
+  body.is-phone .candidate p{font-size:8px;margin:1px 0;line-height:1.12}
+  body.is-phone .photo,body.is-phone .photo-placeholder{width:50px;height:62px;font-size:7px}
+  body.is-phone .status{font-size:13px;margin-top:3px}
+  body.is-phone .hint{left:7px;right:7px;bottom:4px;padding-top:2px;font-size:7px;line-height:1.15}
+  body.is-phone .finish{font-size:42px;margin:34px 0 8px;letter-spacing:5px}
+
+  body.is-phone .keyboard{padding:4px;border-radius:4px;align-self:stretch;min-height:0}
+  body.is-phone .brand{font-size:6px;margin-bottom:2px}
+  body.is-phone .keys{gap:2px}
+  body.is-phone .key{min-height:21px;height:clamp(21px,8.2dvh,31px);font-size:13px;box-shadow:inset 0 -2px #000}
+  body.is-phone .actions{gap:2px;margin-top:3px}
+  body.is-phone .action{height:24px;font-size:6px}
+  body.is-phone .confirm{height:27px}
+  body.is-phone .foot{font-size:6px;margin-top:1px;line-height:1.1}
+}
+@media (orientation: landscape) and (max-height: 360px){
+  body.is-phone .top{height:20px}
+  body.is-phone .page{height:calc(100dvh - 20px)}
+  body.is-phone .progress{display:none}
+  body.is-phone .card{max-height:calc(100dvh - 24px);padding:7px 11px}
+  body.is-phone .card .notice{font-size:7px}
+  body.is-phone .urna{grid-template-columns:minmax(0,1.78fr) minmax(150px,.52fr)}
+  body.is-phone .key{min-height:18px;height:clamp(18px,7.7dvh,25px);font-size:12px}
+  body.is-phone .action{height:21px}.confirm{height:24px}
+  body.is-phone .photo,body.is-phone .photo-placeholder{width:44px;height:54px}
+  body.is-phone .candidate{grid-template-columns:1fr 44px}
+}
