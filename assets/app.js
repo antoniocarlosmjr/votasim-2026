@@ -9,13 +9,24 @@ const BASE_OFFICES=[
  {id:"presidente",cargo:"PRESIDENTE",digits:2}
 ];
 let state="",data=null,offices=[],step=0,input="",blank=false,votes=[],unlock=false,timer=null,audioCtx=null;
-const confirmAudio=new Audio("./assets/audio/confirmacao.mp3");
-const finishAudio=new Audio("./assets/audio/fim.mp3");
-confirmAudio.preload="auto"; finishAudio.preload="auto";
+const AUDIO_URLS={
+ confirm:new URL("./assets/audio/confirmacao.mp3",document.baseURI).href,
+ finish:new URL("./assets/audio/fim.mp3",document.baseURI).href
+};
+const audioCache={
+ confirm:new Audio(AUDIO_URLS.confirm),
+ finish:new Audio(AUDIO_URLS.finish)
+};
+audioCache.confirm.preload="auto"; audioCache.finish.preload="auto";
+audioCache.confirm.load(); audioCache.finish.load();
 window.VOTASIM_PHOTOS=window.VOTASIM_PHOTOS||{};
 const $=q=>document.querySelector(q), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function toast(s){const t=$("#toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800)}
-function isMobilePortrait(){return window.matchMedia("(max-width: 900px) and (orientation: portrait)").matches}
+function isPhone(){
+ if(navigator.userAgentData&&typeof navigator.userAgentData.mobile==="boolean")return navigator.userAgentData.mobile;
+ return /Android.+Mobile|iPhone|iPod|Windows Phone|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+function isMobilePortrait(){return isPhone()&&window.matchMedia("(orientation: portrait)").matches}
 function updateOrientationPrompt(){const p=$("#orientationPrompt");if(!p)return;const show=isMobilePortrait();p.classList.toggle("show",show);p.setAttribute("aria-hidden",show?"false":"true");document.body.classList.toggle("mobile-portrait-locked",show)}
 window.addEventListener("resize",updateOrientationPrompt);window.addEventListener("orientationchange",()=>setTimeout(updateOrientationPrompt,120));
 function loadPhotoBundle(uf){if(window.VOTASIM_PHOTOS[uf])return Promise.resolve();return new Promise(resolve=>{const s=document.createElement("script");s.src=`./assets/photo-data/${uf}.js`;s.onload=resolve;s.onerror=resolve;document.head.appendChild(s)})}
@@ -23,9 +34,21 @@ function photoFor(c){return window.VOTASIM_PHOTOS[c.uf]?.[String(c.id)]||null}
 function audio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume();return audioCtx}
 function tone(freq=900,duration=.055,delay=0,volume=.045){try{const a=audio(),o=a.createOscillator(),g=a.createGain(),t=a.currentTime+delay;o.type="sine";o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(volume,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+duration)}catch(e){}}
 function keySound(){tone(720,.035,0,.025)}
-function playClip(a){try{a.pause();a.currentTime=0;const p=a.play();if(p?.catch)p.catch(()=>{})}catch(e){}}
-function confirmSound(){playClip(confirmAudio)}
-function finishSound(){playClip(finishAudio)}
+function playClip(kind,volume=1){
+ try{
+   const cached=audioCache[kind];
+   cached.pause(); cached.currentTime=0; cached.volume=volume;
+   const p=cached.play();
+   if(p?.catch)p.catch(()=>{
+     // Fallback: a fresh media element avoids stale/failed Audio instances on some mobile browsers.
+     const a=new Audio(AUDIO_URLS[kind]); a.volume=volume; a.play().catch(()=>{});
+   });
+ }catch(e){
+   try{const a=new Audio(AUDIO_URLS[kind]);a.volume=volume;a.play().catch(()=>{})}catch(_){ }
+ }
+}
+function confirmSound(){playClip("confirm",1)}
+function finishSound(){playClip("finish",1)}
 function home(){ $("#app").innerHTML=`<section class="card"><h1>🗳️ VotaSim 2026</h1><p class="lead">Simule a sequência da votação de 2026 com dados de candidaturas preparados a partir da base pública do TSE.</p><button class="primary" onclick="chooseUF()">COMEÇAR</button><p class="notice"><b>Projeto independente e educativo.</b> Não é um serviço do TSE ou da Justiça Eleitoral. Nenhum voto é transmitido, registrado ou contabilizado.</p></section>`}
 function chooseUF(){const opts=Object.entries(UFS).map(([u,n])=>`<option value="${u}" ${u==="SE"?"selected":""}>${n}</option>`).join("");$("#app").innerHTML=`<section class="card"><h2>Escolha a UF</h2><p>Os cargos estaduais serão carregados para a UF selecionada. Presidente é nacional.</p><select id="uf">${opts}</select><button class="primary" onclick="loadUF()">CARREGAR CANDIDATURAS</button><p class="notice">Os arquivos em <code>/data</code> são gerados pelo importador incluído no projeto.</p></section>`}
 async function loadUF(){

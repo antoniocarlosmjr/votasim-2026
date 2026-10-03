@@ -34,5 +34,28 @@ button,select{font:inherit}.app{max-width:1120px;min-height:100vh;margin:auto;ba
 /* V3.3.1 — no celular em retrato, a experiência exige paisagem */
 .orientation-help{font-size:13px!important;margin-top:10px!important;color:#aaa!important}
 body.mobile-portrait-locked{overflow:hidden}
-@media (max-width:900px) and (orientation:portrait){.orientation-prompt.show{display:flex!important}.orientation-card{padding:8px}.orientation-card h2{font-size:26px}.orientation-card p{font-size:16px}}
-\n\n/* V3.3.2 — paisagem mobile mais compacta para caber inteira na viewport */\n@media (max-width: 900px) and (orientation: landscape){\n  .app{min-height:100dvh}\n  .top{height:30px;padding:0 8px}.top strong{font-size:12px}.top span{font-size:8px;padding:2px 5px}\n  .page{padding:3px;min-height:calc(100dvh - 30px);height:calc(100dvh - 30px);align-items:center;overflow:hidden}\n  .urna-wrap{max-height:100%;display:flex;flex-direction:column}\n  .progress{margin:0 3px 3px;font-size:8px;line-height:10px}\n  .urna{grid-template-columns:minmax(0,1.62fr) minmax(205px,.68fr);gap:5px;padding:5px;border-radius:6px;min-height:0;flex:1}\n  .display{min-height:0;height:100%;max-height:none;padding:7px 9px;border-width:2px}\n  .display>div:first-child{font-size:10px}\n  .office{font-size:15px;margin:1px 0 4px}.digits{min-height:27px;margin-bottom:4px;gap:4px}.box{width:23px;height:27px;font-size:17px;border-width:1px}\n  .candidate{grid-template-columns:1fr 62px;gap:5px}.candidate h2{font-size:14px;margin:1px 0}.candidate p{font-size:10px;margin:1px 0;line-height:1.2}\n  .photo,.photo-placeholder{width:62px;height:76px;font-size:9px}.status{font-size:16px;margin-top:4px}.hint{left:9px;right:9px;bottom:5px;padding-top:3px;font-size:8px;line-height:1.25}\n  .keyboard{padding:5px;border-radius:5px}.brand{margin-bottom:3px;font-size:7px}.keys{gap:3px}.key{min-height:27px;font-size:15px;border-radius:3px}\n  .actions{gap:3px;margin-top:4px}.action{height:29px;font-size:7px}.confirm{height:33px}.foot{font-size:7px;margin-top:2px}\n}\n@media (max-width: 900px) and (orientation: landscape) and (max-height: 390px){\n  .top{height:26px}.page{height:calc(100dvh - 26px);min-height:calc(100dvh - 26px)}\n  .progress{display:none}.urna{grid-template-columns:minmax(0,1.68fr) minmax(190px,.62fr)}\n  .key{min-height:24px;font-size:14px}.action{height:26px}.confirm{height:30px}\n  .photo,.photo-placeholder{width:55px;height:68px}.candidate{grid-template-columns:1fr 55px}\n}\n
+@media (orientation:portrait){.orientation-prompt.show{display:flex!important}.orientation-card{padding:8px}.orientation-card h2{font-size:26px}.orientation-card p{font-size:16px}}
+
+
+/* V3.3.2 — paisagem mobile mais compacta para caber inteira na viewport */
+@media (max-width: 900px) and (orientation: landscape){
+  .app{min-height:100dvh}
+  .top{height:30px;padding:0 8px}.top strong{font-size:12px}.top span{font-size:8px;padding:2px 5px}
+  .page{padding:3px;min-height:calc(100dvh - 30px);height:calc(100dvh - 30px);align-items:center;overflow:hidden}
+  .urna-wrap{max-height:100%;display:flex;flex-direction:column}
+  .progress{margin:0 3px 3px;font-size:8px;line-height:10px}
+  .urna{grid-template-columns:minmax(0,1.62fr) minmax(205px,.68fr);gap:5px;padding:5px;border-radius:6px;min-height:0;flex:1}
+  .display{min-height:0;height:100%;max-height:none;padding:7px 9px;border-width:2px}
+  .display>div:first-child{font-size:10px}
+  .office{font-size:15px;margin:1px 0 4px}.digits{min-height:27px;margin-bottom:4px;gap:4px}.box{width:23px;height:27px;font-size:17px;border-width:1px}
+  .candidate{grid-template-columns:1fr 62px;gap:5px}.candidate h2{font-size:14px;margin:1px 0}.candidate p{font-size:10px;margin:1px 0;line-height:1.2}
+  .photo,.photo-placeholder{width:62px;height:76px;font-size:9px}.status{font-size:16px;margin-top:4px}.hint{left:9px;right:9px;bottom:5px;padding-top:3px;font-size:8px;line-height:1.25}
+  .keyboard{padding:5px;border-radius:5px}.brand{margin-bottom:3px;font-size:7px}.keys{gap:3px}.key{min-height:27px;font-size:15px;border-radius:3px}
+  .actions{gap:3px;margin-top:4px}.action{height:29px;font-size:7px}.confirm{height:33px}.foot{font-size:7px;margin-top:2px}
+}
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 390px){
+  .top{height:26px}.page{height:calc(100dvh - 26px);min-height:calc(100dvh - 26px)}
+  .progress{display:none}.urna{grid-template-columns:minmax(0,1.68fr) minmax(190px,.62fr)}
+  .key{min-height:24px;font-size:14px}.action{height:26px}.confirm{height:30px}
+  .photo,.photo-placeholder{width:55px;height:68px}.candidate{grid-template-columns:1fr 55px}
+}
