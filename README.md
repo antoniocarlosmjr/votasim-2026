@@ -1,18 +1,18 @@
-# VotaSim 2026 — V3.1
+# VotaSim 2026 — V3.3
 
-Esta versão já contém os JSONs gerados a partir do arquivo `consulta_cand_2026.zip` fornecido pelo usuário em 03/10/2026.
+Simulador independente e educativo da sequência de votação. Não é um serviço do TSE ou da Justiça Eleitoral e não registra, transmite ou contabiliza votos.
 
-## Publicação
-Não é necessário executar Python para esta versão.
-Substitua o conteúdo do repositório pelos arquivos deste pacote e faça commit/push na branch `main`.
+## V3.3
+- Fotografias carregadas para todas as UFs e Presidência a partir dos pacotes fornecidos do TSE.
+- Fotografias agrupadas por UF em `assets/photo-data/*.js` para evitar mais de 20 mil arquivos estáticos no deploy.
+- Remoção da informação técnica “Situação na fonte” da tela de votação.
+- Aviso em celulares no modo retrato recomendando girar o aparelho; o usuário pode continuar na vertical.
+- Layout horizontal otimizado para celular.
+- Feedback sonoro gerado pelo navegador para teclas, confirmação e encerramento. Os tons são da simulação e não são gravações oficiais do TSE.
 
-## Estrutura
-- `index.html`
-- `assets/app.css`
-- `assets/app.js`
-- `data/AC.json` ... `data/TO.json`
-- `data/BR.json` para Presidência
-- `tools/import_tse.py` mantido apenas para futuras atualizações dos dados
+## Teste local
+Sirva a pasta por HTTP, por exemplo:
 
-## Observação
-As fotos não estão incluídas neste pacote porque o ZIP de candidaturas contém CSVs, não os arquivos de fotografias. A interface já possui suporte ao campo `foto` para uma próxima atualização.
+    python3 -m http.server 8000
+
+Depois abra `http://localhost:8000`.
